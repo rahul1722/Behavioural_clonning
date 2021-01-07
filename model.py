@@ -8,32 +8,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 import tensorflow as tf
 """
-def download(url, file):
-    if not os.path.isfile(file):
-        print("Download file... " + file + " ...")
-        urlretrieve(url,file)
-        print("File downloaded")
 
-download('https://drive.google.com/drive/folders/1KkwnvcR1rZpd0X0BQussLkHE6IRrXwDA?usp=sharing','data') #s3 path of the dataset provided by udacity
-
-print("All the files are downloaded")
-
-
-def uncompress_features_labels(dir,name):
-    if(os.path.isdir(name)):
-        print('Data extracted')
-    else:
-        with ZipFile(dir) as zipf:
-            zipf.extractall('data')
-uncompress_features_labels('data.zip','data')
-
-
-def data_Files(mypath):
-    onlyfiles = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
-    print(onlyfiles)
-
-print('All files downloaded and extracted')
-"""
 
 def random_distort(img, angle):
     
@@ -62,7 +37,7 @@ def random_distort(img, angle):
     M = cv2.getPerspectiveTransform(pts1,pts2)
     new_img = cv2.warpPerspective(new_img,M,(w,h), borderMode=cv2.BORDER_REPLICATE)
     return (new_img.astype(np.uint8), angle)
-
+"""
 
 def img_preprocess(image):
     #new_image = image.astype(float)
