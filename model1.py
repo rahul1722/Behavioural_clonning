@@ -31,7 +31,7 @@ def generate_training_data(image_paths, angles, batch_size): #validation_flag=Fa
     #y = np.array()
     while True:       
         for i in range(batch_size):
-            index = random.choice(100)
+            index = random.randint(1.19000)
             X[i] = img_preprocess(image_paths[index])
             y[i] = angles[index]
           
