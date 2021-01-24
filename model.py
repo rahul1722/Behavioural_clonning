@@ -13,32 +13,13 @@ import matplotlib.pyplot as plt
 
 
 def img_preprocess(image):
-    Blur = 21
-    Canny_thresh_1 = 180
-    Canny_thresh_2 = 200
-    Mask_dilate_iter = 10
-    Mask_erode_iter = 10
-    Mask_color = (0.0,0.0,1.0)
     
     gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-    
-    #edges = cv2.Canny(image, Canny_thresh_1, Canny_thresh_2)
     edges = cv2.dilate(gray, None)
     edges = cv2.erode(edges, None)
-    
-   
-    
-    #erosion_size = 100
-    #new_image = image.astype(float)
     new_image = edges[65:135,:,]
-    #new_image = cv2.cvtColor(new_image, cv2.COLOR_RGB2GRAY)
-    #new_image = cv2.GaussianBlur(new_image,  (5, 5), 0)
     new_image = cv2.resize(new_image, (320, 160))
     new_image = cv2.cvtColor(new_image, cv2.COLOR_GRAY2RGB)
-    #new_image = cv2.Canny(new_image,20,200)
-    #new_image = cv2.erode(new_image, (2 * erosion_size + 1, 2 * erosion_size + 1),
-                                       #(erosion_size, erosion_size))
-    #new_image = cv2.cvtColor(new_image, cv2.COLOR_YUV2RGB).
     
     return new_image
 
@@ -50,8 +31,6 @@ def generate_training_data(image_paths, angles, batch_size): #validation_flag=Fa
     image_paths, angles = shuffle(image_paths, angles)
     X = np.zeros((batch_size,160,320,3))
     y = np.zeros((batch_size,1))
-    #X = np.array()
-    #y = np.array()
     while True:       
         for i in range(batch_size):
             index = random.randint(1,19000)
@@ -85,15 +64,13 @@ cv2.imwrite(filename,new_im)
 #cv2.imshow('Modified image',modified_image)
 
 """
-#img_data = ("/opt/carnd_p3/data/IMG/","my_data/IMG/")
 
 lines_udacity = []
 lines_my_data = []
-data = ["/opt/carnd_p3/data","my_data"]
+data = ["/opt/carnd_p3/data","my_data"] #Using both Udacity sample data and my data as a list
 
 with open(data[0] + '/driving_log.csv') as csv_file:
     reader = csv.reader(csv_file)
-    #csv.field_size_limit(15000)
     next(csv_file)
     for line in reader:
         lines_udacity.append(line)
@@ -121,7 +98,6 @@ for column in lines_udacity:
         
 with open(data[1] + '/my_data_driving_log.csv') as csv_file:
     reader = csv.reader(csv_file)
-    #csv.field_size_limit(15000)
     next(csv_file)
     for line in reader:
         lines_my_data.append(line)
@@ -141,7 +117,6 @@ for column in lines_my_data:
         images.append(image)
         measurements.append(measurement)
  
-#print(images[134])
 
 images = np.array(images)
 measurements = np.array(measurements)
@@ -163,31 +138,23 @@ from keras.optimizers import Adam
 
 model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
-#model.add(Cropping2D(cropping=((60,20), (0,0))))
 model.add(Convolution2D(24,(5,5), strides=(2,2), activation='relu'))
-#model.add(Dropout(0.3))
 model.add(Convolution2D(36,(5,5), strides=(2,2), activation='relu'))
-#model.add(Dropout(0.3))
 model.add(Convolution2D(48,(5,5), strides=(2,2), activation='relu'))
-#model.add(Dropout(0.3))
 model.add(Convolution2D(64,(3,3), activation='relu'))
-#model.add(Dropout(0.3))
-#model.add(Convolution2D(76,3,3, activation='relu'))
-#model.add(Convolution2D(88,3,3, activation='relu'))
 model.add(Flatten())
 model.add(Dense(100))
-model.add(Dropout(0.3))
+model.add(Dropout(0.3)) #added 2 dropout layers as the model was over-fitting without it
 model.add(Dense(50))
-model.add(Dropout(0.3))
+model.add(Dropout(0.3)) 
 model.add(Dense(10))
-#model.add(Dropout(0.5))
 model.add(Dense(1))
 
 
 
-train_data = generate_training_data(Image_train, angle_train, 1500)#, validation_flag=False)
-valid_data = generate_training_data(Image_train, angle_train, 750)#, validation_flag=True)
-test_data = generate_training_data(Image_test, angle_test, 200)#, validation_flag=True)
+train_data = generate_training_data(Image_train, angle_train, 1500) #1500 samples per generator data was selected on a random basis. I tried with 1000 but it wasn't learning quite well. when tried with 2000, the GPU would take a very long time. So I chose something in-between and it worked well
+valid_data = generate_training_data(Image_train, angle_train, 750)
+test_data = generate_training_data(Image_test, angle_test, 200)
 
 
 
