@@ -95,34 +95,22 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 The final model architecture (model.py lines 139-151) consisted of a convolution neural network with the following layers and layer sizes ...
 
+
+
 Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
 
 ![alt text][image1]
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+To capture good driving behavior, I used the Udacity sample data to begin with.
 
-![alt text][image2]
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+I then recorded the vehicle recovering from the left side and right sides of the road back to center only at specific areas, where the car was drifting off of the road. I added a correction component of +/- 0.5 to the left and right images to keep the vehicle in the center.
 
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
+To augment the data set, I added the dilute and errode functions from the cv2 class and the cropped the image to show only the road and avoid all the background. I believe, this help the model to train with very little data.  
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
+After the collection process, I had about 30000 images, of which I split 20% into the test set. I fed the train data to the model using a generator function. The generator picked up 1500 random images from the data set for training the model.  I then preprocessed this data by adding the dilute and errode functions from the cv2 class and then cropped the image to show only the road and avoid all the background. 
+
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 4 with 200 steps per epoch. I used an adam optimizer so that manually training the learning rate wasn't necessary.
