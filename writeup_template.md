@@ -78,24 +78,21 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to 
+The overall strategy for deriving a model architecture was to identify the different lane marking from the images and give a strearing angle as an output using a regression model.
 
-My first step was to use a convolution neural network model similar to the NVIDIA model as mentioned it the earlier class. I thought this model might be appropriate because it is proven and I will only tweek the hyperparameter in order to make it work for the given track. I was able to succefully complete 1 lap using this model without going off the road. 
+My first step was to use a convolution neural network model similar to the NVIDIA model as mentioned it the classes. I thought this model might be appropriate because it is proven and I will only have to tweek the hyperparameters in order to build a good model. I was able to succefully complete 1 lap using this model without going off the road. 
 
 In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
 
-To combat the overfitting, I intorduced 2 Ddropout layers and also played around with the batch size in generator function. Depending on the Validation accuracy, I changed the batch size and finally I decided to go with 1500 samples per batch and 200 steps per epoch 
+To combat the overfitting, I intorduced 2 dropout layers and also played around with the batch size in generator function. Depending on the validation accuracy, I changed the batch size and finally 1500 samples per batch and 200 steps per epoch worked for me.
 
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track. To improve the driving behavior in these cases, I recorded additional data where the car was drifting off and fed to the model. This helped to bring back the car to the center whenever it is getting close to the lane markings.
+The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track. To improve the driving behavior in these cases, I recorded additional data so the car can learn better with all the different patterns of lanes. This helped to bring back the car to the center whenever it is getting close to the lane markings.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
 #### 2. Final Model Architecture
 
 The final model architecture (model.py lines 139-151) consisted of a convolution neural network with the following layers and layer sizes ...
-
-
 
 Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
 
@@ -105,12 +102,10 @@ Here is a visualization of the architecture (note: visualizing the architecture 
 
 To capture good driving behavior, I used the Udacity sample data to begin with.
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center only at specific areas, where the car was drifting off of the road. I added a correction component of +/- 0.5 to the left and right images to keep the vehicle in the center.
+I then recorded the vehicle recovering from the left side and right sides of the road back to center only at specific areas, where the car was drifting off of the road. I saved my data in the opt folder and Udacity data in the CarND folder. I called images from both data sets by defining their paths in a list. I added a correction component of +/- 0.5 to the left and right images to keep the vehicle in the center. In the end, I had close to 24000 images which was then split into train and validatiion sets with 80:20 ratio. 
 
+I used a generator function to feed the model with random batch of 1500 images in order to save disk space. This way, the model trained on all the 19000 images from the training set with minimum disk sapce. 
 
-To augment the data set, I added the dilute and errode functions from the cv2 class and the cropped the image to show only the road and avoid all the background. I believe, this help the model to train with very little data.  
-
-
-After the collection process, I had about 30000 images, of which I split 20% into the test set. I fed the train data to the model using a generator function. The generator picked up 1500 random images from the data set for training the model.  I then preprocessed this data by adding the dilute and errode functions from the cv2 class and then cropped the image to show only the road and avoid all the background. 
+Before feeding the images to the model, the generator function preprocessed them using the img_preprocess function. Images were pre processed using the dilute and errode methods from the cv2 class and cropped to show only the road and avoid all the background. I believe, this helped the model to train with very little data.
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 4 with 200 steps per epoch. I used an adam optimizer so that manually training the learning rate wasn't necessary.
