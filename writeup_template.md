@@ -108,7 +108,7 @@ Layer 11 Dense - 1
 
 
 
-![alt text][https://github.com/rahul1722/Behavioural_clonning/blob/master/Images/Architecture.JPG]
+![alt text](https://github.com/rahul1722/Behavioural_clonning/blob/master/Images/Architecture.JPG)
 
 #### 3. Creation of the Training Set & Training Process
 
