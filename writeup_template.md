@@ -93,8 +93,19 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 #### 2. Final Model Architecture
 
 The final model architecture (model.py lines 139-151) consisted of a convolution neural network with the following layers and layer sizes ...
+Layer 1 (Convolution) - 78 x 158 x 24 ; Stride - 2 x 2 ; Filter - 5 x 5
+Layer 2 (Convolution) - 37 x 77 x 36 ; Stride - 2 x 2 ; Filter - 5 x 5
+Layer 3 (Convolution) - 17 x 37 x 48 ; Stride - 2 x 2 ; Filter - 5 x 5
+Layer 4 (Convolution) - 6 x 17 x 64 ; Stride - 2 x 2 ; Filter - 3 x 3
+Layer 5 Flatten layer
+Layer 6 Dense - 100 neurons
+Layer 7 Dropout - 0.3
+Layer 8 Dense - 50 neurons
+Layer 9 Dropout - 0.3
+Layer 10 Dense - 10 neurons
+Layer 11 Dense - 1
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+
 
 ![alt text][image1]
 
